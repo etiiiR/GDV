@@ -1,0 +1,139 @@
+---
+title: "GDV Etienne Roulet LO1"
+output: GDV Notebook LO1
+---
+
+```{r}
+library(tidyverse)
+# Pie Chart from data frame with Appended Sample Sizes
+result <- all_tournaments %>% 
+          filter(year == 2017) %>% 
+          arrange(desc(prize_money)) %>% 
+          slice(1:10)
+  
+
+```
+
+```{r}
+
+library(treemap)
+
+# Create data
+group <- c(result['tournament'])
+value <- c(result['prize_money'])
+data <- data.frame(group,value)
+
+print(data) 
+
+# treemap
+treemap(data,index = c("tournament","prize_money"),vSize = "prize_money")
+
+```
+```{r}
+
+library(treemap)
+library(tidyverse)
+# Pie Chart from data frame with Appended Sample Sizes
+result <- all_tournaments %>% 
+          filter(year == 2017) %>% 
+          arrange(desc(prize_money)) %>% 
+          slice(1:25)
+
+# Create data
+group <- c(result['tournament'])
+value <- c(result['prize_money'])
+data <- data.frame(group,value)
+
+print(data) 
+
+# treemap
+treemap(data,index = c("tournament","prize_money"),vSize = "prize_money")
+
+```
+
+```{r}
+
+library(treemap)
+library(tidyverse)
+# Pie Chart from data frame with Appended Sample Sizes
+result <- all_tournaments %>% 
+          filter(year == 2017) %>% 
+          arrange(desc(prize_money)) %>% 
+          slice(1:5)
+
+slices <- c(result$prize_money)
+lbls <- c(result$tournament)
+pie(slices, labels = lbls, main="The biggest Tennis Tournaments")
+```
+```{r}
+# Load ggplot2
+library(ggplot2)
+
+# Create data
+
+result_of_court_types <- all_tournaments %>% 
+          filter(year == 2017) %>% 
+          arrange(desc(court_surface)) %>%
+        group_by(court_surface) %>% 
+        summarise(n = n())
+print(result_of_court_types)
+
+data <- data.frame(
+  court_types=result_of_court_types$court_surface,  
+  counts=result_of_court_types$n
+  )
+
+# Barplot
+ggplot(data, aes(x=court_types, y=counts)) + 
+  geom_bar(stat = "identity")
+
+```
+```{r}
+# Load ggplot2
+library(ggplot2)
+
+# Create data
+
+result_of_court_types <- all_tournaments %>% 
+          filter(year == 2000) %>% 
+          arrange(desc(court_surface)) %>%
+        group_by(court_surface) %>% 
+        summarise(n = n())
+print(result_of_court_types)
+
+data <- data.frame(
+  court_types=result_of_court_types$court_surface,  
+  counts=result_of_court_types$n
+  )
+
+# Barplot
+ggplot(data, aes(x=court_types, y=counts)) + 
+  geom_bar(stat = "identity")
+
+```
+
+```{r}
+# Load ggplot2
+library(ggplot2)
+
+# Create data
+
+result_of_court_types <- all_tournaments %>% 
+          filter(year == 1950) %>% 
+          arrange(desc(court_surface)) %>%
+        group_by(court_surface) %>% 
+        summarise(n = n())
+print(result_of_court_types)
+
+data <- data.frame(
+  court_types=result_of_court_types$court_surface,  
+  counts=result_of_court_types$n
+  )
+
+# Barplot
+ggplot(data, aes(x=court_types, y=counts)) + 
+  geom_bar(stat = "identity")
+
+```
+```
+
