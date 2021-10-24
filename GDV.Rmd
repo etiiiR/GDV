@@ -88,19 +88,26 @@ result_of_court_types <- all_tournaments %>%
           filter(year == 2017) %>% 
           arrange(desc(court_surface)) %>%
         group_by(court_surface) %>% 
-        summarise(n = n())
+        summarise(n = n()) %>%
+        filter(!is.na(court_surface))
 print(result_of_court_types)
 
 data <- data.frame(
   court_types=result_of_court_types$court_surface,  
-  counts=result_of_court_types$n
+  Anzahl=result_of_court_types$n
   )
 
 # Barplot
-ggplot(data, aes(x=court_types, y=counts)) + 
-  geom_bar(stat = "identity")
+ggplot(data, aes(x=court_types, y=Anzahl, fill=court_types)) + 
+  geom_bar(stat = "identity") +
+  scale_fill_manual("Legende", values = c("Carpet" = "green4", "Clay" = "tomato", "Grass" = "green", "Hard" = "royalblue3")) +
+  labs(title="Tennis Untergründe 2017 ATP") +
+  xlab("Spielunterlage") + ylab("Anzahl Spiele 2017")
 
 ```
+
+
+
 ```{r}
 # Load ggplot2
 library(ggplot2)
@@ -108,7 +115,7 @@ library(ggplot2)
 # Create data
 
 result_of_court_types <- all_tournaments %>% 
-          filter(year == 2000) %>% 
+          filter(year == 2017) %>% 
           arrange(desc(court_surface)) %>%
         group_by(court_surface) %>% 
         summarise(n = n()) %>%
@@ -170,11 +177,36 @@ result_of_winnings <- all_matches %>%
   slice(1:10) 
 
 
-pie(result_of_winnings$wins, labels = result_of_winnings$player_name, main="Gewonnene ATP Titel seit 1950") + scale_fill_manual(values = ) theme_void()
+pie(result_of_winnings$wins, labels = result_of_winnings$player_name, main="Gewonnene ATP Titel seit 1950") + 
+  scale_fill_manual(values = result_of_winnings$wins) +
+  theme_void()
 
 
 
 ```
+
+```{r}
+
+result_of_winnings = result_of_winnings %>%
+  arrange(desc(wins))
+
+
+
+print(result_of_winnings)
+
+
+ggplot(result_of_winnings, aes(x=player_name, y=wins, fill=wins)) + 
+  geom_bar(stat = "identity") +
+  labs(title="Top 10 Tennis Spieler als Barplot") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  scale_x_discrete() +
+  xlab("Spieler Name") + 
+  ylab("Gewonnen ATP Titel")                 
+```
+
+
+
+
 ```{r}
 library("tidyverse")
 library("ggplot2")
