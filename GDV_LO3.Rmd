@@ -1,0 +1,51 @@
+---
+title: "GDV LO3"
+output: html_notebook
+---
+
+```{r Read in}
+library(readr)
+betting_moneyline <- read_csv("betting_moneyline.csv")
+
+betting_spreads <- read_csv("betting_spreads.csv")
+
+betting_totals <- read_csv("betting_totals.csv")
+
+
+all_matches <- read_csv("all_matches.csv")
+
+```
+```{r}
+library(ggplot2)
+library(tidyverse)
+
+betting_won_loose <- betting_totals %>%
+  inner_join(all_matches, by=c("team1" = "player_id", "team2" = "opponent_id" )) %>%
+  sample_n(size=100) %>%
+  arrange(book_id)  %>%
+  group_by(book_name)
+
+statistics <- all_matches %>%
+  group_by(player_name) %>%
+  summarise(double_faults = sum(double_faults), aces = sum(aces), times_played = n(), double_faults_per_play = double_faults / times_played, aces_per_play = aces / times_played) %>%
+  ungroup()
+
+str(statistics)
+
+ggplot(statistics, aes(y=double_faults_per_play)) +
+  geom_boxplot() +
+  labs(title = "Anzahl der Doppelfehler", subtitle = "pro Spieler") +
+  ylab("Doppelfehler pro Spieltag")
+
+
+  
+  
+```
+
+```{r}
+ggplot(statistics, aes(y=aces_per_play)) +
+  geom_boxplot() +
+  labs(title = "Anzahl der Asse", subtitle = "pro Spieler") +
+  ylab("Asse pro Spieltag")
+```
+
