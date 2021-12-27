@@ -225,6 +225,41 @@ ggplot(winnings, aes(x=year, y=prize_money)) +
 
 ```
 
+```{r}
+library(ggparliament)
+# install.packages("tidyverse")
+library(tidyverse)
+
+print(election_data)
+# Data
+UK <- election_data %>%
+  filter(country == "UK" & year == 2017)
+
+print(UK)
+# Create the data frame to be used
+uk_semicircle <- parliament_data(election_data = UK,
+                                 type = "semicircle", # Parliament type
+                                 parl_rows = 10,      # Number of rows of the parliament
+                                 party_seats = UK$seats) # Seats per party
+
+ggplot(uk_semicircle, aes(x = x, y = y, colour = party_short)) +
+  geom_parliament_seats() + 
+  theme_ggparliament() +
+  labs(title = "Wahlen in UK, 2017") +
+  scale_colour_manual(values = uk_semicircle$colour, 
+                      limits = uk_semicircle$party_short) 
+```
+```{r}
+UK <- election_data %>%
+  filter(country == "UK" & year == 2017)
+
+ggplot(UK, aes(x = party_short, y = seats, fill =party_long)) +
+  geom_col() + 
+  labs(title = "Wahlen in UK, 2017") +
+  xlab("Anzahl Sitze") +
+  ylab("Anzahl Sitze")
+
+```
 
 
 

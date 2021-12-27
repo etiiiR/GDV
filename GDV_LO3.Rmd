@@ -14,6 +14,9 @@ betting_totals <- read_csv("betting_totals.csv")
 
 all_matches <- read_csv("all_matches.csv")
 
+bitcoin <- read_csv("bitstampUSD_1-min_data_2012-01-01_to_2021-03-31.csv")
+
+
 ```
 ```{r}
 library(ggplot2)
@@ -30,10 +33,13 @@ statistics <- all_matches %>%
   summarise(double_faults = sum(double_faults), aces = sum(aces), times_played = n(), double_faults_per_play = double_faults / times_played, aces_per_play = aces / times_played) %>%
   ungroup()
 
-str(statistics)
 
-ggplot(statistics, aes(y=double_faults_per_play)) +
-  geom_boxplot() +
+player_stats <- statistics %>%
+  sample_n(size=8)
+
+
+ggplot(player_stats, aes(x=player_name, y=double_faults_per_play, fill=player_name)) +
+  geom_col() +
   labs(title = "Anzahl der Doppelfehler", subtitle = "pro Spieler") +
   ylab("Doppelfehler pro Spieltag")
 
@@ -44,8 +50,112 @@ ggplot(statistics, aes(y=double_faults_per_play)) +
 
 ```{r}
 ggplot(statistics, aes(y=aces_per_play)) +
-  geom_boxplot() +
+  geom_bar() +
   labs(title = "Anzahl der Asse", subtitle = "pro Spieler") +
   ylab("Asse pro Spieltag")
 ```
+
+
+
+```{r}
+library(treemap)
+library(tidyverse)
+# Pie Chart from data frame with Appended Sample Sizes
+
+library(quantmod)
+
+from <- c("EUR")
+to <- c("USD")
+dfs <- getQuote(paste0(from, to, "=X"))
+euro <- dfs$Last
+
+from <- c("GBP")
+to <- c("USD")
+dfs <- getQuote(paste0(from, to, "=X"))
+pound <- dfs$Last
+
+from <- c("AUD")
+to <- c("USD")
+dfs <- getQuote(paste0(from, to, "=X"))
+aud <- dfs$Last
+
+
+result <- all_tournaments %>% 
+          filter(year == 2017) %>% 
+          mutate(in_usd = ifelse(currency == '€',  prize_money * euro, prize_money  )) %>%
+          mutate(in_usd = ifelse(currency == 'A$',  prize_money * aud, prize_money  )) %>%
+          mutate(in_usd = ifelse(currency == '£',  prize_money * pound, prize_money  )) %>%
+          arrange(desc(prize_money)) %>%
+          slice(1:25)
+
+print(result)
+
+# Create data
+group <- c(result['tournament'] )
+value <- c(result['in_usd'])
+data <- data.frame(group,value)
+
+print(data) 
+
+
+
+
+
+# treemap
+new_data <- data %>%
+  mutate(in_usd = round(in_usd / 1000000, digits = 2)) %>%
+  mutate(group.Index=paste(tournament, in_usd, sep ="\n"))
+
+treemap(new_data,index = c("group.Index","in_usd"),vSize = "in_usd", title = "Preisgeld 2017 in Mio", bg.labels=c("transparent"),fontcolor.labels=c("white"),)
+```
+```{r}
+library(ggplot2)
+
+cleaned <- all_tournaments %>%
+  filter(prize_money > 1000000)
+
+df <- as.data.frame(EuStockMarkets[, 1:4])
+
+
+ggplot(df) + 
+  geom_area(aes(x = seq_along(SMI), y = SMI),
+            fill = 2, alpha = 0.85) +
+  labs(title = "SMI im lauf der Zeit", subtitle = "Stockmarket quelle EuStockMarkets core Rlang") +
+  ylab("SMI") +
+  xlab("Wert des SMIs")
+  
+
+```
+
+```{r}
+library(ggplot2)
+
+cleaned <- all_tournaments %>%
+  filter(prize_money > 1000000)
+
+df <- as.data.frame(EuStockMarkets[, 1:4])
+
+
+ggplot(df) + 
+  geom_area(aes(x = seq_along(SMI), y = SMI),
+            fill = 2, alpha = 0.85) +
+  labs(title = "SMI im lauf der Zeit", subtitle = "Stockmarket quelle EuStockMarkets core Rlang") +
+  ylab("SMI") +
+  xlab("Wert des SMIs")
+  
+
+```
+
+
+```{r}
+library(GGally)
+print(all_tournaments)
+
+new_all_matches <- all_matches %>%
+  slice(1:75)
+
+ggpairs(new_all_matches,          # Data frame
+        columns = 20:24) # Columns
+```
+
 
