@@ -41,7 +41,9 @@ player_stats <- statistics %>%
 ggplot(player_stats, aes(x=player_name, y=double_faults_per_play, fill=player_name)) +
   geom_col() +
   labs(title = "Anzahl der Doppelfehler", subtitle = "pro Spieler") +
-  ylab("Doppelfehler pro Spieltag")
+  ylab("Doppelfehler pro Spieltag")+
+  xlab("Spielername") +
+  scale_fill_discrete(name = "Spielernamen")
 
 
   

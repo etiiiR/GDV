@@ -226,6 +226,24 @@ ggplot(winnings, aes(x=year, y=prize_money)) +
 ```
 
 
+```{r}
+
+result_of_winnings = result_of_winnings %>%
+  arrange(desc(wins))
+
+
+
+print(result_of_winnings)
+
+
+ggplot(result_of_winnings, aes(x=player_name, y=wins, fill=wins, width=1)) + 
+  geom_bar(stat = "identity") +
+  labs(title="Top 10 Tennis Spieler als Barplot") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5)) +
+  scale_x_discrete() +
+  xlab("Spieler Name") + 
+  ylab("Gewonnen ATP Titel")                 
+```
 
 
 
