@@ -1,0 +1,36 @@
+---
+title: "GDV LO5"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(ggparliament)
+# install.packages("tidyverse")
+library(tidyverse)
+
+print(election_data)
+# Data
+UK <- election_data %>%
+  filter(country == "UK" & year == 2017)
+
+print(UK)
+# Create the data frame to be used
+uk_semicircle <- parliament_data(election_data = UK,
+                                 type = "semicircle", # Parliament type
+                                 parl_rows = 10,      # Number of rows of the parliament
+                                 party_seats = UK$seats) # Seats per party
+
+ggplot(uk_semicircle, aes(x = x, y = y, colour = party_short)) +
+  geom_parliament_seats() + 
+  theme_ggparliament() +
+  labs(title = "Wahlen in UK, im Jahre 2017", subtitle="Anzahl Sitzte: 650 Sitzte, Die Konservativen behalten die Oberhand", caption=" \n Quelle: library(ggparliament) \n" ) +
+  scale_colour_manual(values = uk_semicircle$colour, 
+                      limits = uk_semicircle$party_short) +
+  guides(color=guide_legend("Partei"))
+```
+```
+

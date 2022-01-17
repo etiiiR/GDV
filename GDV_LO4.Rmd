@@ -4,6 +4,8 @@ output: html_notebook
 ---
 
 ```{r}
+library(tidyverse)
+library(ggplot2)
 all_matches_10_Players_1980 <- all_matches %>%
   filter(complete.cases(.) & start_date > 1980) %>%
   group_by(player_name) %>%
@@ -20,6 +22,7 @@ ggplot(all_matches_10best, aes(x=start_date, y=double_faults))+
   facet_wrap(~ player_name) +
   xlab("") +
   ylab("Anzahl Doppelfehler")+
+  labs(caption="Erkentniss: Als Negativ Beispiel für eine Schlechte Daarstellungsform mit falsch gewählter Geometrie") +
   theme(legend.position="none") 
 ```
 ```{r}

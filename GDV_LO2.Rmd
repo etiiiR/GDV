@@ -245,9 +245,10 @@ uk_semicircle <- parliament_data(election_data = UK,
 ggplot(uk_semicircle, aes(x = x, y = y, colour = party_short)) +
   geom_parliament_seats() + 
   theme_ggparliament() +
-  labs(title = "Wahlen in UK, 2017") +
+  labs(title = "Wahlen in UK, 2017", subtitle="Anzahl Sitzte: 650 Sitzte, Mehrheit ab 320", caption="Quelle: library(ggparliament)" ) +
   scale_colour_manual(values = uk_semicircle$colour, 
-                      limits = uk_semicircle$party_short) 
+                      limits = uk_semicircle$party_short) +
+  guides(color=guide_legend("Partei"))
 ```
 ```{r}
 UK <- election_data %>%
@@ -255,9 +256,10 @@ UK <- election_data %>%
 
 ggplot(UK, aes(x = party_short, y = seats, fill =party_long)) +
   geom_col() + 
-  labs(title = "Wahlen in UK, 2017") +
+  labs(title = "Wahlen in UK, 2017", subtitle="Anzahl Sitzte: 650 Sitzte, Mehrheit ab 320", caption="Quelle: library(ggparliament)" ) +
   xlab("Anzahl Sitze") +
-  ylab("Anzahl Sitze")
+  ylab("Anzahl Sitze")+
+  guides(color=guide_legend("Partei"))
 
 ```
 
